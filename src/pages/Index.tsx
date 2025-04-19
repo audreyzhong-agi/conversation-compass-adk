@@ -15,8 +15,8 @@ const Index = () => {
   const handleConversationUploaded = (text: string) => {
     setConversation(text);
     toast({
-      title: "Conversation uploaded",
-      description: "Your conversation is now ready for analysis",
+      title: "Conversation ready for analysis",
+      description: "Share your perspective and we'll help you understand the dynamics",
     });
     setStep("analysis");
   };
@@ -25,7 +25,7 @@ const Index = () => {
     setAnalysis(analysisData);
     toast({
       title: "Analysis complete",
-      description: "Review the patterns identified and proceed to draft a response",
+      description: "Let's work on crafting a thoughtful response together",
     });
     setStep("draft");
   };
@@ -35,8 +35,8 @@ const Index = () => {
     setAnalysis(null);
     setStep("upload");
     toast({
-      title: "Process reset",
-      description: "You can now upload a new conversation",
+      title: "Starting fresh",
+      description: "You can now analyze a new conversation",
     });
   };
 
@@ -44,7 +44,10 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-primary">Conversation Compass</h1>
+          <div>
+            <h1 className="text-2xl font-bold text-primary">Conversation Compass</h1>
+            <p className="text-sm text-gray-600">Navigate difficult conversations with clarity</p>
+          </div>
           {step !== "upload" && (
             <Button variant="outline" onClick={handleReset}>
               Start New Analysis
@@ -76,7 +79,7 @@ const Index = () => {
       <footer className="bg-white border-t mt-auto">
         <div className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
           <p className="text-center text-sm text-gray-500">
-            Conversation Compass • Powered by Google ADK (Agent Development Kit)
+            Conversation Compass • A mindful approach to communication
           </p>
         </div>
       </footer>

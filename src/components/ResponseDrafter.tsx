@@ -22,9 +22,16 @@ export const ResponseDrafter = ({
 
   // Simulate ADK draft generation
   const generateAiDraft = () => {
+    if (!analysis.userPerspective) {
+      toast({
+        title: "More context needed",
+        description: "We need to understand your goals better before suggesting a response",
+      });
+      return;
+    }
+
     setIsDrafting(true);
     
-    // Simulate API call delay
     setTimeout(() => {
       const mockAiDraft = "I understand you've been feeling frustrated about our communication. When you say I'm not making you a priority, it makes me feel defensive because I really am trying my best with work right now. I care about our relationship and want to find a better balance. Could we set up a regular time to check in with each other that works around my current project deadline?";
       
@@ -33,8 +40,8 @@ export const ResponseDrafter = ({
       setShowAiDraft(true);
       
       toast({
-        title: "Draft generated",
-        description: "Review and customize the suggested response",
+        title: "Response suggested",
+        description: "Review and customize the draft to match your voice",
       });
     }, 2000);
   };
@@ -50,68 +57,59 @@ export const ResponseDrafter = ({
   const handleSendResponse = () => {
     toast({
       title: "Response ready",
-      description: "In the full version, you'd be able to send this directly or copy to your messaging app",
+      description: "Copy your response to continue the conversation",
     });
   };
 
   return (
     <div className="p-6">
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2">Draft Your Response</h2>
-        <p className="text-gray-600">
-          Based on the analysis, let's craft a thoughtful response
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-4">
-          <h3 className="font-medium">Analysis Summary</h3>
-          <div className="bg-gray-50 p-4 rounded-md text-sm">
-            <p className="mb-3">{analysis.summary}</p>
-            <h4 className="font-medium mb-2">Identified Patterns:</h4>
-            <ul className="list-disc pl-5 space-y-2">
-              {analysis.patterns.map((pattern: any, index: number) => (
-                <li key={index}>
-                  <span className="font-medium">{pattern.type}</span>: {pattern.description}
-                  <div className="text-xs text-gray-500 mt-1">
-                    Example: "{pattern.examples[0]}"
-                  </div>
-                </li>
-              ))}
-            </ul>
+          <h3 className="font-medium">Communication Insights</h3>
+          <div className="bg-gray-50 p-4 rounded-md">
+            <div className="mb-4">
+              <p className="text-sm mb-3">{analysis.summary}</p>
+              <h4 className="font-medium mb-2">Key Patterns:</h4>
+              <ul className="list-disc pl-5 space-y-2">
+                {analysis.patterns.map((pattern: any, index: number) => (
+                  <li key={index} className="text-sm">
+                    <span className="font-medium">{pattern.type}</span>
+                    <div className="text-gray-600">{pattern.context}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          
-          <div className="flex space-x-2">
-            <Button
-              variant="outline"
-              onClick={generateAiDraft}
-              disabled={isDrafting}
-              className="flex-1"
-            >
-              {isDrafting ? (
-                <>
-                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <Edit className="mr-2 h-4 w-4" />
-                  Suggest Response
-                </>
-              )}
-            </Button>
-          </div>
-          
+
+          <Button
+            variant="outline"
+            onClick={generateAiDraft}
+            disabled={isDrafting}
+            className="w-full"
+          >
+            {isDrafting ? (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                Drafting...
+              </>
+            ) : (
+              <>
+                <Edit className="mr-2 h-4 w-4" />
+                Suggest Response
+              </>
+            )}
+          </Button>
+
           {showAiDraft && (
-            <div className="mt-4">
+            <div>
               <h4 className="font-medium mb-2">Suggested Response:</h4>
-              <div className="relative bg-primary/5 p-4 rounded-md border border-primary/20 text-sm mb-2">
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 text-sm mb-2">
                 {aiDraft}
               </div>
               <Button 
-                size="sm" 
-                variant="secondary" 
-                onClick={useAiDraft} 
+                size="sm"
+                variant="secondary"
+                onClick={useAiDraft}
                 className="w-full"
               >
                 Use This Draft
@@ -119,7 +117,7 @@ export const ResponseDrafter = ({
             </div>
           )}
         </div>
-        
+
         <div className="space-y-4">
           <h3 className="font-medium">Your Response</h3>
           <Textarea
@@ -128,16 +126,15 @@ export const ResponseDrafter = ({
             value={userDraft}
             onChange={(e) => setUserDraft(e.target.value)}
           />
-          
-          <div className="flex justify-end">
-            <Button 
-              onClick={handleSendResponse} 
-              disabled={!userDraft.trim()}
-            >
-              <Send className="mr-2 h-4 w-4" />
-              Prepare to Send
-            </Button>
-          </div>
+
+          <Button
+            onClick={handleSendResponse}
+            disabled={!userDraft.trim()}
+            className="w-full"
+          >
+            <Send className="mr-2 h-4 w-4" />
+            Prepare to Send
+          </Button>
         </div>
       </div>
     </div>
