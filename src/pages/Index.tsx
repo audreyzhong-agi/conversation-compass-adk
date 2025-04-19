@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ConversationUpload } from "@/components/ConversationUpload";
@@ -41,18 +40,31 @@ const Index = () => {
     });
   };
 
+  const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    in: { opacity: 1, y: 0 },
+    out: { opacity: 0, y: -20 }
+  };
+
+  const pageTransition = {
+    type: "tween",
+    ease: "anticipate",
+    duration: 0.5
+  };
+
   const renderStepContent = () => {
     switch (step) {
       case "upload":
         return (
           <motion.div 
             key="upload"
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+            transition={pageTransition}
           >
-            <h2 className="text-xl font-semibold text-center mb-4 text-gray-700">
+            <h2 className="text-xl font-semibold text-center mb-4 animate-fade-up">
               "Behind every message is a feeling. Let's decode it together."
             </h2>
             <div className="p-6 bg-white rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -64,10 +76,11 @@ const Index = () => {
         return (
           <motion.div 
             key="analysis"
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+            transition={pageTransition}
           >
             <div className="p-6 bg-white rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
               <ConversationAnalysis
@@ -81,15 +94,16 @@ const Index = () => {
         return (
           <motion.div 
             key="draft"
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            initial="initial"
+            animate="in"
+            exit="out"
+            variants={pageVariants}
+            transition={pageTransition}
           >
             <div className="p-6 bg-white rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl">
               <ResponseDrafter conversation={conversation} analysis={analysis} />
               <div className="text-center text-green-600 italic mt-4 animate-pulse">
-                You're taking a brave step toward better connection 💛
+                This message balances honesty and empathy. Feel confident sending it. 💚
               </div>
             </div>
           </motion.div>
