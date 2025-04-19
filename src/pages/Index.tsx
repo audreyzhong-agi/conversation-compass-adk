@@ -5,6 +5,8 @@ import { ConversationUpload } from "@/components/ConversationUpload";
 import { ConversationAnalysis } from "@/components/ConversationAnalysis";
 import { ResponseDrafter } from "@/components/ResponseDrafter";
 import { useToast } from "@/hooks/use-toast";
+import { ProgressSteps } from "@/components/ui/progress-steps";
+import { HeroSection } from "@/components/ui/hero-section";
 
 const Index = () => {
   const [step, setStep] = useState<"upload" | "analysis" | "draft">("upload");
@@ -41,15 +43,17 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
-      <header className="bg-white shadow-sm">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      <header className="bg-white/50 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-primary">Conversation Compass</h1>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              Conversation Compass
+            </h1>
             <p className="text-sm text-gray-600">Navigate difficult conversations with clarity</p>
           </div>
           {step !== "upload" && (
-            <Button variant="outline" onClick={handleReset}>
+            <Button variant="outline" onClick={handleReset} className="transition-all duration-300 hover:scale-105">
               Start New Analysis
             </Button>
           )}
@@ -57,22 +61,29 @@ const Index = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <div className="bg-white shadow rounded-lg overflow-hidden">
-          {step === "upload" && (
-            <ConversationUpload onUpload={handleConversationUploaded} />
-          )}
-          {step === "analysis" && conversation && (
-            <ConversationAnalysis 
-              conversation={conversation} 
-              onAnalysisComplete={handleAnalysisComplete} 
-            />
-          )}
-          {step === "draft" && conversation && analysis && (
-            <ResponseDrafter 
-              conversation={conversation} 
-              analysis={analysis} 
-            />
-          )}
+        <div className="max-w-4xl mx-auto">
+          <ProgressSteps currentStep={step} />
+          
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-500 hover:shadow-md">
+            {step === "upload" && (
+              <>
+                <HeroSection />
+                <ConversationUpload onUpload={handleConversationUploaded} />
+              </>
+            )}
+            {step === "analysis" && conversation && (
+              <ConversationAnalysis 
+                conversation={conversation} 
+                onAnalysisComplete={handleAnalysisComplete} 
+              />
+            )}
+            {step === "draft" && conversation && analysis && (
+              <ResponseDrafter 
+                conversation={conversation} 
+                analysis={analysis} 
+              />
+            )}
+          </div>
         </div>
       </main>
 
